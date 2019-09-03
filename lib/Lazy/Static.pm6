@@ -1,5 +1,5 @@
 use v6.c;
-unit module Lazy::Static:ver<0.0.1>:auth<samgwise>;
+unit module Lazy::Static:ver<0.0.2>:auth<samgwise>;
 
 
 =begin pod
@@ -77,7 +77,17 @@ sub lazy-static(&generator) is export {
     }
 
     # Return a closure over the mutable wrapper
-    -> {
+    -> *@_ {
         $wrapper()
     }
+}
+
+#| Turns a subroutine into a lazy-static version
+multi sub trait_mod:<is>(Sub $s, :$lazy-static) is export {
+    $s.wrap: lazy-static( -> { callsame } )
+}
+
+#| Turns a method into a instance scoped lazy-static routine
+multi sub trait_mod:<is>(Method $m, :$lazy-static) is export {
+    $m.wrap: lazy-static( { callsame } )
 }

@@ -60,3 +60,25 @@ sub lazy-static(
 
 Creates a closure which lazily returns the result of the generator provided. The generator Callable is executed the first time the closure is called and all calls afterwards will receive the the value from the first call. If the result of the generator is never required it will never be generated. A value generated in a lazy-static closure will persist until it is garbage collected, like a normal scalar.
 
+### multi sub trait_mod:<is>
+
+```perl6
+multi sub trait_mod:<is>(
+    Sub $s,
+    :$lazy-static
+) returns Mu
+```
+
+Turns a subroutine into a lazy-static version
+
+### multi sub trait_mod:<is>
+
+```perl6
+multi sub trait_mod:<is>(
+    Method $m,
+    :$lazy-static
+) returns Mu
+```
+
+Turns a method into a instance scoped lazy-static routine
+

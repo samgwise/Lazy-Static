@@ -1,0 +1,36 @@
+#! /usr/bin/env perl6
+use v6.c;
+use Test;
+
+use Lazy::Static;
+
+# Subroutine trait
+
+my Int $called = 0;
+sub trait-test() is lazy-static {
+    ++$called
+}
+
+is $called, 0, "Called variable still 0 prior to call";
+
+is trait-test, 1, "Call trait-test sub";
+is trait-test, 1, "Call trait-test sub again";
+
+class TraitTest {
+    has Int $.called = 0;
+
+    method trait-test() is lazy-static {
+        ++$!called
+    }
+}
+
+for 1..2 -> $round {
+    my TraitTest $test .= new;
+
+    is $test.called, 0, "Called attribute still 0 prior to call ($round)";
+
+    is $test.trait-test, 1, "Call trait-test method ($round)";
+    is $test.trait-test, 1, "Call trait-test method again ($round)";
+}
+
+done-testing;
