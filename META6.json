@@ -1,0 +1,26 @@
+{
+  "auth" : "samgwise",
+  "authors" : [
+    "Sam Gillespie"
+  ],
+  "build-depends" : [ ],
+  "depends" : [ ],
+  "description" : "Lazy calculation of static values",
+  "license" : "Artistic-2.0",
+  "name" : "Lazy::Static",
+  "perl" : "6.c",
+  "provides" : {
+    "Lazy::Static" : "lib/Lazy/Static.pm6"
+  },
+  "resources" : [ ],
+  "source-url" : "https://github.com/samgwise/Lazy-Static.git",
+  "tags" : [
+    "state",
+    "Lazy",
+    "Static",
+    "Constant",
+    "Thread-safe"
+  ],
+  "test-depends" : [ ],
+  "version" : "0.0.1"
+}

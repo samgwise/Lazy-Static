@@ -1,0 +1,41 @@
+use v6.c;
+use Test;
+
+use-ok "Lazy::Static";
+use Lazy::Static;
+
+# Test lazy static core behaviour
+{
+    my Bool $called = False;
+    my Callable $gen = -> { $called = !$called }
+    my &lazy-test = lazy-static($gen);
+    is $called, False, "Generator not called yet";
+    is lazy-test, True, "Called";
+    is $called, True, "Generator has been called";
+    is lazy-test, True, "Called again";
+}
+
+# Test thread-safe behaviour
+diag "Executing thread safety stress test...";
+for 0..1000 {
+    my Int $access = 0;
+    my Callable $gen = -> { ++$access }
+    my &lazy-test = lazy-static($gen);
+    my Promise $go .= new;
+
+    my @promises = do for 0..16 {
+        start {
+            await $go;
+            lazy-test
+        }
+    }
+
+    $go.keep;
+    await Promise.allof(@promises);
+
+    for @promises.map( *.result ) {
+        is $_, 1, "Lazy static async result";
+    }
+}
+
+done-testing;
