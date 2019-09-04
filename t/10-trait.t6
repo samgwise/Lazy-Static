@@ -33,4 +33,26 @@ for 1..2 -> $round {
     is $test.trait-test, 1, "Call trait-test method again ($round)";
 }
 
+#
+# Check role composition
+#
+
+role TraitTesting {
+    has Int $.called = 0;
+
+    method very-lazy-much-static( --> Int) is lazy-static { ++$!called }
+}
+
+class CompositionTest does TraitTesting { }
+
+for 1..2 -> $round {
+    my CompositionTest $test .= new;
+
+    todo 'Application of trait for methods in roles is not currently supported';
+    is $test.very-lazy-much-static, 1, "Call composed method ($round)";
+    todo 'Application of trait for methods in roles is not currently supported';
+    is $test.very-lazy-much-static, 1, "Call composed method again ($round)";
+}
+
+
 done-testing;

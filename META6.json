@@ -1,5 +1,5 @@
 {
-  "auth" : "samgwise",
+  "auth" : "trait application for role",
   "authors" : [
     "Sam Gillespie"
   ],
@@ -22,5 +22,5 @@
     "Thread-safe"
   ],
   "test-depends" : [ ],
-  "version" : "0.0.2"
+  "version" : "trait application for role"
 }

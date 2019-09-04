@@ -1,4 +1,4 @@
-use v6.c;
+use v6.d;
 unit module Lazy::Static:ver<0.0.2>:auth<samgwise>;
 
 
@@ -89,5 +89,27 @@ multi sub trait_mod:<is>(Sub $s, :$lazy-static) is export {
 
 #| Turns a method into a instance scoped lazy-static routine
 multi sub trait_mod:<is>(Method $m, :$lazy-static) is export {
-    $m.wrap: lazy-static( { callsame } )
+    my Bool $is-role = $m.package.HOW ~~ Metamodel::ParametricRoleHOW;
+
+    unless $is-role {
+        # say "trait application for class";
+        # say "Setting up lazy-static for { $m.gist } of package { $m.package.^name }";
+        $m.wrap(lazy-static { callsame });
+        # say "Trait composed for { $m.gist } of package { $m.package.^name }";
+    }
+
+    # Roles need to have methods wrapped post composition phase and this does not yet appear to be supported
+    if $is-role {
+        my &captured-method = -> { $m }
+        #INIT {
+            # say "trait application for role";
+            # say "Setting up lazy-static for { captured-method.gist } of package { captured-method.package.^name }";
+
+            warn "Application of the lazy-static trait is currently unsuported for roles, skipping trait application for { captured-method.gist } of package { captured-method.package.^name }";
+            # captured-method.wrap(lazy-static { callsame });
+
+            # say "Trait composed for { captured-method.gist } of package { captured-method.package.^name }";
+        #}
+    }
+
 }
